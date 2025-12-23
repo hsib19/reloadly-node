@@ -1,0 +1,14 @@
+{
+  "name": "reloadly-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": false,
+  "scripts": {
+    "build:sdk": "pnpm --filter reloadly-sdk build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.25.0"
+}
