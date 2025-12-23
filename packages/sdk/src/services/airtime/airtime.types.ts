@@ -19,6 +19,18 @@ export interface Country {
 export type Countries = Country[];
 
 // Operators
+export interface OperatorOptions {
+    includeBundles?: boolean;
+    includeData?: boolean;
+    suggestedAmountsMap?: boolean;
+    size?: number;
+    page?: number;
+    includeCombo?: boolean;
+    comboOnly?: boolean;
+    bundlesOnly?: boolean;
+    dataOnly?: boolean;
+    pinOnly?: boolean;
+}
 
 export interface Fx {
     rate: number;
@@ -108,6 +120,28 @@ export interface OperatorByIdResponse {
 
 export type AutoDetectOperatorResponse = OperatorByIdResponse;
 export type GetOperatorByISOId = OperatorByIdResponse;
+export interface AutoDetectOperatorPath {
+    phone: number;
+    countryIsoCode: string;
+}
+
+export interface AutoDetectOperatorQuery {
+    suggestedAmountsMap?: boolean;
+    suggestedAmounts?: boolean;
+}
+
+export interface GetOperatorByIsoCodeParams {
+    suggestedAmountsMap?: boolean;
+    suggestedAmounts?: boolean;
+    includePin?: boolean;
+    includeData?: boolean;
+    includeBundles?: boolean;
+    includeCombo?: boolean;
+    comboOnly?: boolean;
+    bundlesOnly?: boolean;
+    dataOnly?: boolean;
+    pinOnly?: boolean;
+}
 
 // FX Rates
 export interface FXRate {
@@ -115,6 +149,11 @@ export interface FXRate {
     name: string;
     fxRate: number;
     currencyCode: string;
+}
+
+export interface FXRateRequest {
+    amount: number;
+    operatorId: number;
 }
 
 // Commissions
@@ -166,6 +205,11 @@ export interface GetPromotionsResponse {
 export interface GetPromotionByIdResponse { content: Promotion; }
 export interface GetPromotionsByIsoCodeResponse { content: Promotion[]; }
 export interface GetPromotionsByOperatorIdResponse { content: Promotion[]; }
+export interface GetPromotionsParams {
+    size?: number;
+    page?: number;
+    languageCode?: string;
+}
 
 // Top-ups
 export interface Phone {
@@ -174,14 +218,21 @@ export interface Phone {
 }
 
 export interface MakeTopUpRequest {
-    operatorId: string;
     amount: string;
-    useLocalAmount: boolean;
-    customIdentifier: string;
+    customIdentifier?: string;
+    operatorId: string;
     recipientEmail?: string;
-    recipientPhone: Phone;
-    senderPhone: Phone;
+    recipientPhone: {
+        countryCode: string;
+        number: string;
+    };
+    senderPhone?: {
+        countryCode: string;
+        number: string;
+    };
+    useLocalAmount?: boolean;
 }
+
 
 export interface PinDetail {
     serial: number;
@@ -283,10 +334,20 @@ export interface PinDetail {
     validity: string;
 }
 
+export interface GetTransactionsParams {
+    size?: number;
+    page?: number;
+    countryCode?: string;
+    operatorId?: string;
+    operatorName?: string;
+    customIdentifier?: string;
+    startDate?: string;
+    endDate?: string;
+}
+
 export interface GetTransactionsResponse {
     content: Transaction[];
 }
-
 
 // MNP Lookup
 export interface MnpLookupRequest {
