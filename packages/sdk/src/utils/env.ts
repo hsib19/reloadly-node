@@ -8,6 +8,10 @@ export function getGiftCardApiBaseUrl(environment: ReloadlyEnvironment) {
     return RELOADLY_ENV_BASE_URLS[environment].giftCards;
 }
 
+export function getUtilityApiBaseUrl(environment: ReloadlyEnvironment) {
+    return RELOADLY_ENV_BASE_URLS[environment].utilities;
+}
+
 export function getAuthBaseUrl(environment: ReloadlyEnvironment) {
     return RELOADLY_ENV_BASE_URLS[environment].auth;
 }
