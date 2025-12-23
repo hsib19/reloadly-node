@@ -1,18 +1,21 @@
 import { ReloadlyConfig } from '@client/reloadly-client';
 import { HttpClient } from '@client/http-client';
 import type {
-    OAuthToken,
-    BalanceResult,
     Category,
-    Country,
     Product,
-    RedeemInstructions,
     FXRate,
     Discount,
-    Transaction,
     OrderGiftCardOptions,
-    OrderGiftCardResult,
+    OrderGiftCardResponse,
+    Countries,
+    GetProductsResponse,
+    GetRedeemInstructionsResponse,
+    GetGiftCardTransactionsResponse,
+    GiftCardTransaction,
+    OrderRedeemCodeResponse,
+    ProductRedeemInstruction,
 } from './giftcards.types';
+import { BalanceResult, OAuthToken } from 'types/commonTypes';
 
 export class GiftCardService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }
@@ -37,39 +40,39 @@ export class GiftCardService {
     }
 
     // Countries
-    async getCountries(): Promise<Country[]> {
-        return this.http.request<Country[]>({ path: '/countries' });
+    async getCountries(): Promise<Countries> {
+        return this.http.request<Countries>({ path: '/countries' });
     }
 
-    async getCountryByISO(isoCode: string): Promise<Country> {
-        return this.http.request<Country>({ path: `/countries/${isoCode}` });
+    async getCountryByISO(countrycode: string): Promise<Countries> {
+        return this.http.request<Countries>({ path: `/countries/${countrycode}` });
     }
 
     // Products
-    async getProducts(): Promise<Product[]> {
-        return this.http.request<Product[]>({ path: '/products' });
+    async getProducts(): Promise<GetProductsResponse> {
+        return this.http.request<GetProductsResponse>({ path: '/products' });
     }
 
     async getProductById(productId: number): Promise<Product> {
         return this.http.request<Product>({ path: `/products/${productId}` });
     }
 
-    async getProductByISO(isoCode: string): Promise<Product[]> {
-        return this.http.request<Product[]>({ path: `/products?isoCode=${isoCode}` });
+    async getProductByISO(isoCode: string): Promise<Product> {
+        return this.http.request<Product>({ path: `/products?isoCode=${isoCode}` });
     }
 
     // Redeem Instructions
-    async getRedeemInstructions(): Promise<RedeemInstructions[]> {
-        return this.http.request<RedeemInstructions[]>({ path: '/redeem-instructions' });
+    async getRedeemInstructions(): Promise<GetRedeemInstructionsResponse> {
+        return this.http.request<GetRedeemInstructionsResponse>({ path: '/redeem-instructions' });
     }
 
-    async getRedeemInstructionsByProductId(productId: number): Promise<RedeemInstructions> {
-        return this.http.request<RedeemInstructions>({ path: `/redeem-instructions/${productId}` });
+    async getRedeemInstructionsByProductId(productId: number): Promise<ProductRedeemInstruction> {
+        return this.http.request<ProductRedeemInstruction>({ path: `/products/${productId}/redeem-instructions` });
     }
 
     // FX Rates
-    async fetchFXRate(from: string, to: string): Promise<FXRate> {
-        return this.http.request<FXRate>({ path: `/fx-rates?from=${from}&to=${to}` });
+    async fetchFXRate(): Promise<FXRate> {
+        return this.http.request<FXRate>({ path: `/fx-rate` });
     }
 
     // Discounts
@@ -78,28 +81,28 @@ export class GiftCardService {
     }
 
     async getDiscountByProductId(productId: number): Promise<Discount> {
-        return this.http.request<Discount>({ path: `/discounts/${productId}` });
+        return this.http.request<Discount>({ path: `/products/${productId}/discounts` });
     }
 
     // Transactions
-    async getTransactions(): Promise<Transaction[]> {
-        return this.http.request<Transaction[]>({ path: '/transactions' });
+    async getTransactions(): Promise<GetGiftCardTransactionsResponse> {
+        return this.http.request<GetGiftCardTransactionsResponse>({ path: '/reports/transactions' });
     }
 
-    async getTransactionById(id: string): Promise<Transaction> {
-        return this.http.request<Transaction>({ path: `/transactions/${id}` });
+    async getTransactionById(transactionId: string): Promise<GiftCardTransaction> {
+        return this.http.request<GiftCardTransaction>({ path: `/reports/transactions/${transactionId}` });
     }
 
     // Orders
-    async orderGiftCard(options: OrderGiftCardOptions): Promise<OrderGiftCardResult> {
-        return this.http.request<OrderGiftCardResult, unknown, OrderGiftCardOptions>({
+    async orderGiftCard(options: OrderGiftCardOptions): Promise<OrderGiftCardResponse> {
+        return this.http.request<OrderGiftCardResponse, unknown, OrderGiftCardOptions>({
             path: '/orders',
             method: 'POST',
             body: options,
         });
     }
 
-    async getRedeemCode(orderId: string): Promise<OrderGiftCardResult> {
-        return this.http.request<OrderGiftCardResult>({ path: `/orders/${orderId}/redeem-code` });
+    async getRedeemCode(transactionId: string): Promise<OrderRedeemCodeResponse> {
+        return this.http.request<OrderRedeemCodeResponse>({ path: `/orders/transactions/${transactionId}/cards` });
     }
 }

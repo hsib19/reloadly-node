@@ -1,3 +1,4 @@
+// Authentication
 export interface OAuthToken {
     access_token: string;
     token_type: 'Bearer';
@@ -9,4 +10,12 @@ export interface TokenRequestConfig {
     clientId: string;
     clientSecret: string;
     environment: 'sandbox' | 'production';
+}
+
+// Account Balance
+export interface BalanceResult {
+    balance: number;
+    currencyCode: string;
+    currencyName: string;
+    updatedAt: string;
 }

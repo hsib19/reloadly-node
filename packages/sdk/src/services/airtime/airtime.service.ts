@@ -1,8 +1,6 @@
 import { ReloadlyConfig } from '@client/reloadly-client';
 import { HttpClient } from '@client/http-client';
 import type {
-    OAuthToken,
-    BalanceResult,
     Country,
     FXRate,
     AsyncTopUpResult,
@@ -25,6 +23,7 @@ import type {
     MnpLookupResponse,
     MnpLookupRequest,
 } from './airtime.types';
+import { OAuthToken, BalanceResult } from 'types/commonTypes';
 
 export class AirtimeService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }

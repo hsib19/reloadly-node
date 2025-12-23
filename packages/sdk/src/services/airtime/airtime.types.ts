@@ -1,19 +1,3 @@
-// Authentication
-export interface OAuthToken {
-    access_token: string;
-    token_type: 'Bearer';
-    expires_in: number;
-    obtained_at: number;
-}
-
-// Account Balance
-export interface BalanceResult {
-    balance: number;
-    currencyCode: string;
-    currencyName: string;
-    updatedAt: string;
-}
-
 // Countries
 export interface Country {
     isoName: string;
