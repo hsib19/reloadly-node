@@ -1,7 +1,7 @@
-import { ReloadlyConfig } from "@client/reloadly-client";
-import { TokenManager } from "@auth/token-manager";
-import { ReloadlyAPIError, ReloadlyNetworkError } from "@errors/reloadly-error";
-import { getAirtimeApiBaseUrl, getAuthBaseUrl } from "@utils/env";
+import { ReloadlyConfig } from "../client/reloadly-client.js";
+import { TokenManager } from "../auth/token-manager.js";
+import { ReloadlyAPIError, ReloadlyNetworkError } from "../errors/reloadly-error.js";
+import { getAirtimeApiBaseUrl, getAuthBaseUrl } from "../utils/env.js";
 
 export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';

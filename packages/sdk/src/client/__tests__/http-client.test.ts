@@ -1,7 +1,7 @@
-import { TokenManager } from '@auth/token-manager';
-import { HttpClient } from '@client/http-client';
-import { ReloadlyConfig } from '@client/reloadly-client';
-import { ReloadlyAPIError, ReloadlyNetworkError } from '@errors/reloadly-error';
+import { TokenManager } from '../../auth/token-manager.js';
+import { HttpClient } from '../../client/http-client.js';
+import { ReloadlyConfig } from '../../client/reloadly-client.js';
+import { ReloadlyAPIError, ReloadlyNetworkError } from '../../errors/reloadly-error.js';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // dummy config

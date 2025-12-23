@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { UtilityPaymentsService } from '../utility-payments.service';
+import { UtilityPaymentsService } from '../utility-payments.service.js';
 
 describe('UtilityPaymentsService', () => {
     let http: { request: ReturnType<typeof vi.fn> };

@@ -1,4 +1,4 @@
-import { RELOADLY_ENV_BASE_URLS, ReloadlyEnvironment } from '@constants/environments';
+import { RELOADLY_ENV_BASE_URLS, ReloadlyEnvironment } from '../constants/environments.js';
 
 export function getAirtimeApiBaseUrl(environment: ReloadlyEnvironment) {
     return RELOADLY_ENV_BASE_URLS[environment].airtime;

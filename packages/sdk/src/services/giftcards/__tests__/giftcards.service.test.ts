@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GiftCardService } from '../giftcards.service';
+import { GiftCardService } from '../giftcards.service.js';
 
 describe('GiftCardService', () => {
     let http: { request: ReturnType<typeof vi.fn> };

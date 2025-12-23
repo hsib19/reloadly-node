@@ -1,6 +1,6 @@
-import { ReloadlyAPIError, ReloadlyNetworkError } from '@errors/reloadly-error';
-import { getAuthBaseUrl } from '@utils/env';
-import { OAuthToken, TokenRequestConfig } from 'types/commonTypes';
+import { ReloadlyAPIError, ReloadlyNetworkError } from '../errors/reloadly-error.js';
+import { getAuthBaseUrl } from '../utils/env.js';
+import { OAuthToken, TokenRequestConfig } from '../types/commonTypes.js';
 
 export class TokenManager {
     private token?: OAuthToken;

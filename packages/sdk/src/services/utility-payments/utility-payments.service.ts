@@ -1,13 +1,13 @@
-import { ReloadlyConfig } from '@client/reloadly-client';
-import { HttpClient } from '@client/http-client';
+import { ReloadlyConfig } from '../../client/reloadly-client.js';
+import { HttpClient } from '../../client/http-client.js';
 import type {
     GetBillersResponse,
     GetTransactionsResponse,
     PayBillRequest,
     PayBillResponse,
     Transaction,
-} from './utility-payments.types';
-import { BalanceResult, OAuthToken } from 'types/commonTypes';
+} from './utility-payments.types.js';
+import { BalanceResult, OAuthToken } from '../../types/commonTypes.js';
 
 export class UtilityPaymentsService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }

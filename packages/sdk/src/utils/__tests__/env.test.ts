@@ -1,5 +1,5 @@
-import { RELOADLY_ENV_BASE_URLS } from '@constants/environments';
-import { getAirtimeApiBaseUrl, getAuthBaseUrl, getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '@utils/env';
+import { RELOADLY_ENV_BASE_URLS } from '../../constants/environments.js';
+import { getAirtimeApiBaseUrl, getAuthBaseUrl, getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '../../utils/env.js';
 import { describe, it, expect } from 'vitest';
 
 describe('env utils', () => {

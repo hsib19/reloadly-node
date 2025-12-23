@@ -1,5 +1,5 @@
-import { ReloadlyConfig } from '@client/reloadly-client';
-import { HttpClient } from '@client/http-client';
+import { ReloadlyConfig } from '../../client/reloadly-client.js';
+import { HttpClient } from '../../client/http-client.js';
 import type {
     Category,
     Product,
@@ -14,8 +14,8 @@ import type {
     GiftCardTransaction,
     OrderRedeemCodeResponse,
     ProductRedeemInstruction,
-} from './giftcards.types';
-import { BalanceResult, OAuthToken } from 'types/commonTypes';
+} from './giftcards.types.js';
+import { BalanceResult, OAuthToken } from '../../types/commonTypes.js';
 
 export class GiftCardService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }

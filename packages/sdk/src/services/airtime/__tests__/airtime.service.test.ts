@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AirtimeService } from '../airtime.service';
+import { AirtimeService } from '../airtime.service.js';
 
 describe('AirtimeService', () => {
     let http: { request: ReturnType<typeof vi.fn> };

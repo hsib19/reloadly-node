@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Reloadly, ReloadlyConfig } from '../reloadly-client';
-import { TokenManager } from '@auth/token-manager';
-import { HttpClient } from '@client/http-client';
-import { AirtimeService } from '@services/airtime/airtime.service';
+import { Reloadly, ReloadlyConfig } from '../reloadly-client.js';
+import { TokenManager } from '../../auth/token-manager.js';
+import { HttpClient } from '../../client/http-client.js';
+import { AirtimeService } from '../../services/airtime/airtime.service.js';
 
 vi.mock('@auth/token-manager', () => ({
     TokenManager: vi.fn(),

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ReloadlyAPIError, ReloadlyNetworkError } from '@errors/reloadly-error';
-import { TokenManager } from '@auth/token-manager';
-import { TokenRequestConfig } from 'types/commonTypes';
+import { ReloadlyAPIError, ReloadlyNetworkError } from '../../errors/reloadly-error.js';
+import { TokenManager } from '../../auth/token-manager.js';
+import { TokenRequestConfig } from '../../types/commonTypes.js';
 
 beforeEach(() => {
     vi.clearAllMocks();

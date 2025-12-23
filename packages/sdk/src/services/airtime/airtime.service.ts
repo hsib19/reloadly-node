@@ -1,5 +1,5 @@
-import { ReloadlyConfig } from '@client/reloadly-client';
-import { HttpClient } from '@client/http-client';
+import { ReloadlyConfig } from '../../client/reloadly-client.js';
+import { HttpClient } from '../../client/http-client.js';
 import type {
     Country,
     FXRate,
@@ -22,8 +22,8 @@ import type {
     GetTransactionsResponse,
     MnpLookupResponse,
     MnpLookupRequest,
-} from './airtime.types';
-import { OAuthToken, BalanceResult } from 'types/commonTypes';
+} from './airtime.types.js';
+import { OAuthToken, BalanceResult } from '../../types/commonTypes.js';
 
 export class AirtimeService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }

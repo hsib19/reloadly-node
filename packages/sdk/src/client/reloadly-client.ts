@@ -1,10 +1,10 @@
-import { TokenManager } from '@auth/token-manager';
-import { HttpClient } from '@client/http-client';
-import { ReloadlyEnvironment } from '@constants/environments';
-import { AirtimeService } from '@services/airtime/airtime.service';
-import { GiftCardService } from '@services/giftcards/giftcards.service';
-import { UtilityPaymentsService } from '@services/utility-payments/utility-payments.service';
-import { getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '@utils/env';
+import { TokenManager } from '../auth/token-manager.js';
+import { HttpClient } from '../client/http-client.js';
+import { ReloadlyEnvironment } from '../constants/environments.js';
+import { AirtimeService } from '../services/airtime/airtime.service.js';
+import { GiftCardService } from '../services/giftcards/giftcards.service.js';
+import { UtilityPaymentsService } from '../services/utility-payments/utility-payments.service.js';
+import { getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '../utils/env.js';
 
 export interface ReloadlyConfig {
     clientId: string;
