@@ -1,4 +1,4 @@
-import { AirtimeService } from '../services/airtime/airtime.service';
+import { AirtimeService } from '@services/airtime/airtime.service';
 
 export interface ReloadlyConfig {
     clientId: string;

@@ -7,7 +7,25 @@
         "declarationMap": true,
         "sourceMap": true,
         "module": "ESNext",
-        "target": "ES2020"
+        "target": "ES2020",
+        "baseUrl": "src",
+        "paths": {
+            "@client/*": [
+                "client/*"
+            ],
+            "@services/*": [
+                "services/*"
+            ],
+            "@errors/*": [
+                "errors/*"
+            ],
+            "@utils/*": [
+                "utils/*"
+            ],
+            "@constants/*": [
+                "constants/*"
+            ]
+        }
     },
     "include": [
         "src"

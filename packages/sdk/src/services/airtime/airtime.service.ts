@@ -1,4 +1,4 @@
-import { ReloadlyConfig } from '../../client/reloadly-client';
+import { ReloadlyConfig } from '@client/reloadly-client';
 
 export class AirtimeService {
     constructor(private config: ReloadlyConfig) { }
