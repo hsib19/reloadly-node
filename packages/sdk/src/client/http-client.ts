@@ -1,7 +1,7 @@
 import { ReloadlyConfig } from "@client/reloadly-client";
 import { TokenManager } from "@auth/token-manager";
 import { ReloadlyAPIError, ReloadlyNetworkError } from "@errors/reloadly-error";
-import { getApiBaseUrl } from "@utils/env";
+import { getApiBaseUrl, getAuthBaseUrl } from "@utils/env";
 
 export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -9,15 +9,16 @@ export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     query?: TQuery;
     body?: TBody;
     headers?: Record<string, string>;
+    useAuthBaseUrl?: boolean;
 }
 
 export class HttpClient {
     constructor(private config: ReloadlyConfig, private tokenManager?: TokenManager) { }
 
 
-    private getBaseUrl(): string {
+    private getBaseUrl(useAuthBaseUrl?: boolean): string {
         const env = this.config.environment ?? 'sandbox';
-        return getApiBaseUrl(env);
+        return useAuthBaseUrl ? getAuthBaseUrl(env) : getApiBaseUrl(env);
     }
 
     async request<TResponse, TQuery = unknown, TBody = unknown>(
