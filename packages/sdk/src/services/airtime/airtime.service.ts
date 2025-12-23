@@ -113,7 +113,7 @@ export class AirtimeService {
 
     async getPromotionsByISO(params: {
         path: {
-            countryCode: number
+            countryCode: string;
         },
         query?: { languageCode: string }
     }): Promise<GetPromotionsByIsoCodeResponse> {
@@ -151,7 +151,7 @@ export class AirtimeService {
     }
 
     // Transactions
-    async getTransactions(query: GetTransactionsParams): Promise<GetTransactionsResponse> {
+    async getTransactions(query?: GetTransactionsParams): Promise<GetTransactionsResponse> {
         return this.http.request<GetTransactionsResponse>({ path: '/topups/reports/transactions', query });
     }
 
@@ -162,7 +162,7 @@ export class AirtimeService {
     // MNP Lookup
     async mnpLookupGET(params: {
         path: {
-            phone: string;
+            phone: number;
             countryCode: string
         },
         query?: {
