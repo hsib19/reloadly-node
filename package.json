@@ -8,8 +8,8 @@
     "build:sdk": "pnpm --filter reloadly-sdk build",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "lint": "eslint . --ext .ts,.js",
-    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky"
   },
   "keywords": [],
