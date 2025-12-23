@@ -1,5 +1,6 @@
-/** @type {import("prettier").Config} */
-module.exports = {
+import type { Config } from 'prettier';
+
+const config: Config = {
   semi: true,
   singleQuote: true,
   trailingComma: 'es5',
@@ -10,3 +11,5 @@ module.exports = {
 
   plugins: ['prettier-plugin-organize-imports'],
 };
+
+export default config;
