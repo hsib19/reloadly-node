@@ -1,10 +1,11 @@
 import { HttpClient } from '@client/http-client';
+import { ReloadlyEnvironment } from '@constants/environments';
 import { AirtimeService } from '@services/airtime/airtime.service';
 
 export interface ReloadlyConfig {
     clientId: string;
     clientSecret: string;
-    environment?: 'sandbox' | 'production';
+    environment?: ReloadlyEnvironment;
 }
 
 export class Reloadly {

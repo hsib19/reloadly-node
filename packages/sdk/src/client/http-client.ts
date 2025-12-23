@@ -1,5 +1,7 @@
-import { ReloadlyConfig } from '@client/reloadly-client';
-import { ReloadlyAPIError, ReloadlyNetworkError } from '@errors/reloadly-error';
+import { ReloadlyConfig } from "@client/reloadly-client";
+import { TokenManager } from "@auth/token-manager";
+import { ReloadlyAPIError, ReloadlyNetworkError } from "@errors/reloadly-error";
+import { getApiBaseUrl } from "@utils/env";
 
 export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -10,12 +12,12 @@ export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
 }
 
 export class HttpClient {
-    constructor(private config: ReloadlyConfig) { }
+    constructor(private config: ReloadlyConfig, private tokenManager?: TokenManager) { }
+
 
     private getBaseUrl(): string {
-        return this.config.environment === 'production'
-            ? 'https://topups.reloadly.com'
-            : 'https://topups-sandbox.reloadly.com';
+        const env = this.config.environment ?? 'sandbox';
+        return getApiBaseUrl(env);
     }
 
     async request<TResponse, TQuery = unknown, TBody = unknown>(
@@ -23,28 +25,32 @@ export class HttpClient {
     ): Promise<TResponse> {
         const url = new URL(this.getBaseUrl() + options.path);
 
-        // attach query params
         if (options.query) {
             Object.entries(options.query).forEach(([key, value]) => {
                 if (value !== undefined) url.searchParams.append(key, String(value));
             });
         }
 
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(options.headers ?? {}),
+        };
+
+        // attach Bearer token if TokenManager provided
+        if (this.tokenManager) {
+            headers['Authorization'] = `Bearer ${await this.tokenManager.getToken()}`;
+        }
+
         try {
             const res = await fetch(url.toString(), {
                 method: options.method ?? 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(options.headers ?? {}),
-                },
+                headers,
                 body: options.body ? JSON.stringify(options.body) : undefined,
             });
 
             const data: TResponse = await res.json().catch(() => ({} as TResponse));
 
-            if (!res.ok) {
-                throw new ReloadlyAPIError(res.status, data);
-            }
+            if (!res.ok) throw new ReloadlyAPIError(res.status, data);
 
             return data;
         } catch (err) {
