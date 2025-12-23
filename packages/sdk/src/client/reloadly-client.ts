@@ -1,6 +1,9 @@
+import { TokenManager } from '@auth/token-manager';
 import { HttpClient } from '@client/http-client';
 import { ReloadlyEnvironment } from '@constants/environments';
 import { AirtimeService } from '@services/airtime/airtime.service';
+import { GiftCardService } from '@services/giftcards/giftcards.service';
+import { getGiftCardApiBaseUrl } from '@utils/env';
 
 export interface ReloadlyConfig {
     clientId: string;
@@ -9,21 +12,23 @@ export interface ReloadlyConfig {
 }
 
 export class Reloadly {
-    private httpClient: HttpClient;
     public airtime: AirtimeService;
-
-    private config: ReloadlyConfig;
+    public giftcards: GiftCardService;
+    private tokenManager: TokenManager;
 
     constructor(config: ReloadlyConfig) {
 
-        this.config = {
-            environment: 'sandbox',
-            ...config,
-        };
+        this.tokenManager = new TokenManager({
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            environment: config.environment ?? 'sandbox'
+        });
 
-        this.httpClient = new HttpClient(config);
+        const airtimeClient = new HttpClient(config, this.tokenManager);
+        const giftCardClient = new HttpClient(config, this.tokenManager, getGiftCardApiBaseUrl(config.environment ?? 'sandbox'));
 
         // init services
-        this.airtime = new AirtimeService(this.config, this.httpClient);
+        this.airtime = new AirtimeService(config, airtimeClient);
+        this.giftcards = new GiftCardService(config, giftCardClient);
     }
 }

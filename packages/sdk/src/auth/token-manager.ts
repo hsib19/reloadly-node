@@ -8,7 +8,8 @@ export class TokenManager {
     constructor(private config: TokenRequestConfig) { }
 
     private getBaseUrl(): string {
-        return getAuthBaseUrl(this.config.environment);
+        const env = this.config.environment ?? 'sandbox';
+        return getAuthBaseUrl(env);
     }
 
     private isTokenValid(): boolean {
