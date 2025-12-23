@@ -22,7 +22,6 @@ Thumbs.db
 
 # Env files
 .env
-.env.*
 
 # Coverage
 coverage/
