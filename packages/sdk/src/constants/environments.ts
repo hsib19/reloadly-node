@@ -1,11 +1,13 @@
 export const RELOADLY_ENV_BASE_URLS = {
     production: {
-        api: 'https://topups.reloadly.com',
+        airtime: 'https://topups.reloadly.com',
         auth: 'https://auth.reloadly.com',
+        giftCards: 'https://giftcards.reloadly.com'
     },
     sandbox: {
-        api: 'https://topups-sandbox.reloadly.com',
+        airtime: 'https://topups-sandbox.reloadly.com',
         auth: 'https://auth-sandbox.reloadly.com',
+        giftCards: 'https://giftcards-sandbox.reloadly.com'
     },
 } as const;
 

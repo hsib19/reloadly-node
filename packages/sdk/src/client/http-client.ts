@@ -1,7 +1,7 @@
 import { ReloadlyConfig } from "@client/reloadly-client";
 import { TokenManager } from "@auth/token-manager";
 import { ReloadlyAPIError, ReloadlyNetworkError } from "@errors/reloadly-error";
-import { getApiBaseUrl, getAuthBaseUrl } from "@utils/env";
+import { getAirtimeApiBaseUrl, getAuthBaseUrl } from "@utils/env";
 
 export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -13,12 +13,12 @@ export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
 }
 
 export class HttpClient {
-    constructor(private config: ReloadlyConfig, private tokenManager?: TokenManager) { }
-
+    constructor(private config: ReloadlyConfig, private tokenManager?: TokenManager, private baseUrl?: string) { }
 
     private getBaseUrl(useAuthBaseUrl?: boolean): string {
+        if (this.baseUrl) return this.baseUrl;
         const env = this.config.environment ?? 'sandbox';
-        return useAuthBaseUrl ? getAuthBaseUrl(env) : getApiBaseUrl(env);
+        return useAuthBaseUrl ? getAuthBaseUrl(env) : getAirtimeApiBaseUrl(env);
     }
 
     async request<TResponse, TQuery = unknown, TBody = unknown>(
