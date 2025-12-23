@@ -1,3 +1,9 @@
+// Authenctication
+export interface RequestCreateAccessTokenAirtime {
+    grant_type: "client_credentials" | string;
+    audience: string;
+}
+
 // Countries
 export interface Country {
     isoName: string;

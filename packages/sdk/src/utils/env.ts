@@ -15,3 +15,10 @@ export function getUtilityApiBaseUrl(environment: ReloadlyEnvironment) {
 export function getAuthBaseUrl(environment: ReloadlyEnvironment) {
     return RELOADLY_ENV_BASE_URLS[environment].auth;
 }
+
+export function getAudience(
+    environment: ReloadlyEnvironment,
+    service: 'airtime' | 'giftCards' | 'utilities' = 'airtime'
+): string {
+    return RELOADLY_ENV_BASE_URLS[environment][service];
+}

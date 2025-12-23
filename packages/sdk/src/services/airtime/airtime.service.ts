@@ -23,15 +23,10 @@ import type {
     MnpLookupResponse,
     MnpLookupRequest,
 } from './airtime.types.js';
-import { OAuthToken, BalanceResult } from '../../types/commonTypes.js';
+import { BalanceResult } from '../../types/commonTypes.js';
 
 export class AirtimeService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }
-
-    // Authentication
-    async createAccessToken(): Promise<OAuthToken> {
-        return this.http.request<OAuthToken>({ path: '/auth/token', method: 'POST' });
-    }
 
     // Account Balance
     async getBalance(): Promise<BalanceResult> {

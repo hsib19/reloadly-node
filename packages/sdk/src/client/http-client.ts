@@ -1,7 +1,6 @@
 import { ReloadlyConfig } from "../client/reloadly-client.js";
 import { TokenManager } from "../auth/token-manager.js";
-import { ReloadlyAPIError, ReloadlyNetworkError } from "../errors/reloadly-error.js";
-import { getAirtimeApiBaseUrl, getAuthBaseUrl } from "../utils/env.js";
+import { ReloadlyAPIError } from "../errors/reloadly-error.js";
 
 export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -13,50 +12,47 @@ export interface HttpRequestOptions<TQuery = unknown, TBody = unknown> {
 }
 
 export class HttpClient {
-    constructor(private config: ReloadlyConfig, private tokenManager?: TokenManager, private baseUrl?: string) { }
+    constructor(
+        private readonly config: ReloadlyConfig,
+        private readonly tokenManager: TokenManager,
+        private readonly baseUrl: string,
+        private readonly accept: string
+    ) { }
 
-    private getBaseUrl(useAuthBaseUrl?: boolean): string {
-        if (this.baseUrl) return this.baseUrl;
-        const env = this.config.environment ?? 'sandbox';
-        return useAuthBaseUrl ? getAuthBaseUrl(env) : getAirtimeApiBaseUrl(env);
-    }
+    async request<T, Q = unknown, B = unknown>(options: {
+        path: string;
+        method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+        query?: Q;
+        body?: B;
+    }): Promise<T> {
+        const token = await this.tokenManager.getToken();
 
-    async request<TResponse, TQuery = unknown, TBody = unknown>(
-        options: HttpRequestOptions<TQuery, TBody>,
-    ): Promise<TResponse> {
-        const url = new URL(this.getBaseUrl() + options.path);
+        const url = new URL(options.path, this.baseUrl);
 
         if (options.query) {
-            Object.entries(options.query).forEach(([key, value]) => {
-                if (value !== undefined) url.searchParams.append(key, String(value));
-            });
+            Object.entries(options.query).forEach(([k, v]) =>
+                url.searchParams.append(k, String(v))
+            );
         }
 
-        const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
-            ...(options.headers ?? {}),
-        };
+        const res = await fetch(url.toString(), {
+            method: options.method ?? 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: this.accept,
+                'Content-Type': 'application/json',
+            },
+            body: options.body ? JSON.stringify(options.body) : undefined,
+        });
 
-        // attach Bearer token if TokenManager provided
-        if (this.tokenManager) {
-            headers['Authorization'] = `Bearer ${await this.tokenManager.getToken()}`;
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : null;
+
+        if (!res.ok) {
+            throw new ReloadlyAPIError(res.status, data);
         }
 
-        try {
-            const res = await fetch(url.toString(), {
-                method: options.method ?? 'GET',
-                headers,
-                body: options.body ? JSON.stringify(options.body) : undefined,
-            });
-
-            const data: TResponse = await res.json().catch(() => ({} as TResponse));
-
-            if (!res.ok) throw new ReloadlyAPIError(res.status, data);
-
-            return data;
-        } catch (err) {
-            if (err instanceof ReloadlyAPIError) throw err;
-            throw new ReloadlyNetworkError(err);
-        }
+        return data as T;
     }
 }
+

@@ -1,3 +1,5 @@
+import { ReloadlyEnvironment } from "../constants/environments.js";
+
 // Authentication
 export interface OAuthToken {
     access_token: string;
@@ -9,7 +11,8 @@ export interface OAuthToken {
 export interface TokenRequestConfig {
     clientId: string;
     clientSecret: string;
-    environment: 'sandbox' | 'production';
+    environment?: ReloadlyEnvironment;
+    audience?: string;
 }
 
 // Account Balance

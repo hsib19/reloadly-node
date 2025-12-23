@@ -15,19 +15,10 @@ import type {
     OrderRedeemCodeResponse,
     ProductRedeemInstruction,
 } from './giftcards.types.js';
-import { BalanceResult, OAuthToken } from '../../types/commonTypes.js';
+import { BalanceResult } from '../../types/commonTypes.js';
 
 export class GiftCardService {
     constructor(private config: ReloadlyConfig, private http: HttpClient) { }
-
-    // Authentication
-    async createAccessToken(): Promise<OAuthToken> {
-        return this.http.request<OAuthToken>({
-            path: '/oauth/token',
-            method: 'POST',
-            useAuthBaseUrl: true,
-        });
-    }
 
     // Account Balance
     async getBalance(): Promise<BalanceResult> {
