@@ -1,5 +1,5 @@
 import { ReloadlyAPIError, ReloadlyNetworkError } from '../errors/reloadly-error.js';
-import { getAuthBaseUrl, getAudience } from '../utils/env.js';
+import { getAuthBaseUrl } from '../utils/env.js';
 import { OAuthToken, TokenRequestConfig } from '../types/commonTypes.js';
 
 export class TokenManager {
@@ -34,7 +34,7 @@ export class TokenManager {
             client_id: this.config.clientId,
             client_secret: this.config.clientSecret,
             grant_type: 'client_credentials',
-            audience: getAudience(this.config.environment ?? 'sandbox'),
+            audience: this.config.audience,
         };
 
         try {

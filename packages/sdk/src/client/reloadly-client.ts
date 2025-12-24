@@ -5,7 +5,7 @@ import { ReloadlyEnvironment } from '../constants/environments.js';
 import { AirtimeService } from '../services/airtime/airtime.service.js';
 import { GiftCardService } from '../services/giftcards/giftcards.service.js';
 import { UtilityPaymentsService } from '../services/utility-payments/utility-payments.service.js';
-import { getAirtimeApiBaseUrl, getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '../utils/env.js';
+import { getAirtimeApiBaseUrl, getAudience, getGiftCardApiBaseUrl, getUtilityApiBaseUrl } from '../utils/env.js';
 
 export interface ReloadlyConfig {
     clientId: string;
@@ -18,34 +18,48 @@ export class Reloadly {
     public giftcards: GiftCardService;
     public utilityPayments: UtilityPaymentsService;
 
-    private tokenManager: TokenManager;
-
     constructor(config: ReloadlyConfig) {
-        this.tokenManager = new TokenManager({
+
+        const airtimeTokenManager = new TokenManager({
             clientId: config.clientId,
             clientSecret: config.clientSecret,
             environment: config.environment ?? 'sandbox',
+            audience: getAudience(config.environment ?? 'sandbox', 'airtime')
+        });
+
+        const giftcardsTokenManager = new TokenManager({
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            environment: config.environment ?? 'sandbox',
+            audience: getAudience(config.environment ?? 'sandbox', 'giftCards')
+        });
+
+        const utilitiesTokenManager = new TokenManager({
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            environment: config.environment ?? 'sandbox',
+            audience: getAudience(config.environment ?? 'sandbox', 'utilities')
         });
 
         const env = config.environment ?? 'sandbox';
 
         const airtimeClient = new HttpClient(
             config,
-            this.tokenManager,
+            airtimeTokenManager,
             getAirtimeApiBaseUrl(env),
             ACCEPT_HEADERS.airtime
         );
 
         const giftcardClient = new HttpClient(
             config,
-            this.tokenManager,
+            giftcardsTokenManager,
             getGiftCardApiBaseUrl(env),
             ACCEPT_HEADERS.giftcards
         );
 
         const utilityClient = new HttpClient(
             config,
-            this.tokenManager,
+            utilitiesTokenManager,
             getUtilityApiBaseUrl(env),
             ACCEPT_HEADERS.utilities
         );

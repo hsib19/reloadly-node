@@ -22,12 +22,12 @@ export class GiftCardService {
 
     // Account Balance
     async getBalance(): Promise<BalanceResult> {
-        return this.http.request<BalanceResult>({ path: '/balance' });
+        return this.http.request<BalanceResult>({ path: '/accounts/balance' });
     }
 
     // Categories
     async getCategories(): Promise<Category[]> {
-        return this.http.request<Category[]>({ path: '/categories' });
+        return this.http.request<Category[]>({ path: '/product-categories' });
     }
 
     // Countries
@@ -48,8 +48,8 @@ export class GiftCardService {
         return this.http.request<Product>({ path: `/products/${productId}` });
     }
 
-    async getProductByISO(isoCode: string): Promise<Product> {
-        return this.http.request<Product>({ path: `/products?isoCode=${isoCode}` });
+    async getProductByISO(countrycode: string): Promise<Product> {
+        return this.http.request<Product>({ path: `countries/${countrycode}/products` });
     }
 
     // Redeem Instructions
