@@ -34,6 +34,7 @@ export default defineConfig({
           { text: 'Get Started', link: '/get-started' },
           { text: 'Authentication', link: '/authentication' },
           { text: 'Error Handling', link: '/error-handling' },
+          { text: 'Best Practice', link: '/best-practice' },
         ]
       },
       {
@@ -228,7 +229,8 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/hsib19/reloadly-node' }
+      { icon: 'github', link: 'https://github.com/hsib19/reloadly-node' },
+      { icon: 'npm', link: 'https://www.npmjs.com/package/reloadly-node' }
     ]
   }
 })
