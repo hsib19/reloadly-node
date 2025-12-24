@@ -46,13 +46,13 @@ A custom Node.js SDK for [Reloadly API](https://www.reloadly.com/), supporting *
 ## Installation
 
 ```bash
-pnpm add reloadly-node
+npm add reloadly-node
 ```
 
 or
 
 ```bash
-npm install reloadly-node
+pnpm install reloadly-node
 ```
 
 ---

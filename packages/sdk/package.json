@@ -1,8 +1,17 @@
 {
   "name": "reloadly-node",
   "version": "1.0.0",
-  "description": "",
-  "private": true,
+  "description": "Unofficial: A custom Node.js SDK for Reloadly API, supporting Airtime, GiftCards, and Utility Payments with TypeScript type-safety and per-service token management.",
+  "private": false,
+  "keywords": [
+    "reloadly",
+    "sdk",
+    "nodejs",
+    "typescript",
+    "api",
+    "payments",
+    "topup"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -30,5 +39,16 @@
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.0.3",
     "vitest": "^4.0.16"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsib19/reloadly-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hsib19/reloadly-node/issues"
+  },
+  "homepage": "https://github.com/hsib19/reloadly-node#readme"
 }
