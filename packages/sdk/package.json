@@ -1,6 +1,6 @@
 {
   "name": "reloadly-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Unofficial: A custom Node.js SDK for Reloadly API, supporting Airtime, GiftCards, and Utility Payments with TypeScript type-safety and per-service token management.",
   "private": false,
   "keywords": [
