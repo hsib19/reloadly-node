@@ -1,7 +1,9 @@
 import { ReloadlyConfig } from '../../client/reloadly-client.js';
 import { HttpClient } from '../../client/http-client.js';
 import type {
+    GetBillersQueryParams,
     GetBillersResponse,
+    GetTransactionsQueryParams,
     GetTransactionsResponse,
     PayBillRequest,
     PayBillResponse,
@@ -14,12 +16,12 @@ export class UtilityPaymentsService {
 
     // Account Balance
     async getBalance(): Promise<BalanceResult> {
-        return this.http.request<BalanceResult>({ path: '/balance' });
+        return this.http.request<BalanceResult>({ path: '/accounts/balance' });
     }
 
     // Utility Billers
-    async getBillers(): Promise<GetBillersResponse> {
-        return this.http.request<GetBillersResponse>({ path: '/billers' });
+    async getBillers(query?: GetBillersQueryParams): Promise<GetBillersResponse> {
+        return this.http.request<GetBillersResponse>({ path: '/billers', query });
     }
 
     // Pay Bill
@@ -32,11 +34,11 @@ export class UtilityPaymentsService {
     }
 
     // Transactions
-    async getTransactions(): Promise<GetTransactionsResponse> {
-        return this.http.request<GetTransactionsResponse>({ path: '/transactions' });
+    async getTransactions(query?: GetTransactionsQueryParams): Promise<GetTransactionsResponse> {
+        return this.http.request<GetTransactionsResponse>({ path: '/transactions', query });
     }
 
-    async getTransactionById(id: string): Promise<Transaction> {
+    async getTransactionById(id: number): Promise<Transaction> {
         return this.http.request<Transaction>({ path: `/transactions/${id}` });
     }
 }

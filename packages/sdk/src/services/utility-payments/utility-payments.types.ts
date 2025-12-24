@@ -34,16 +34,37 @@ export interface GetBillersResponse {
     content: Biller[];
 }
 
+export type UtilityType =
+    | 'ELECTRICITY_BILL_PAYMENT'
+    | 'WATER_BILL_PAYMENT'
+    | 'TV_BILL_PAYMENT'
+    | 'INTERNET_BILL_PAYMENT'
+
+export type ServiceType = 'PREPAID' | 'POSTPAID'
+
+export interface GetBillersQueryParams {
+    id?: number
+    name?: string
+    type?: UtilityType
+    serviceType?: ServiceType
+    countryISOCode?: string
+    page?: number
+    size?: number
+}
 
 // Pay Bill
+export interface AdditionalInfo {
+    [key: string]: string | number | boolean | null
+}
+
 export interface PayBillRequest {
-    additionalInfo?: Record<string, unknown>;
-    amount: number;
-    amountId?: number;
-    billerId: number;
-    referenceId?: string;
-    AccountNumber: string;
-    useLocalAmount?: boolean;
+    additionalInfo?: AdditionalInfo
+    amount: number
+    amountId?: number | null
+    billerId: number
+    referenceId?: string
+    subscriberAccountNumber: string
+    useLocalAmount?: boolean
 }
 
 export interface PayBillResponse {
@@ -57,6 +78,30 @@ export interface PayBillResponse {
 }
 
 // Transactions
+export type TransactionStatus =
+    | 'PROCESSING'
+    | 'SUCCESSFUL'
+    | 'FAILED'
+    | 'REFUNDED'
+
+export type BillerType =
+    | 'ELECTRICITY_BILL_PAYMENT'
+    | 'WATER_BILL_PAYMENT'
+    | 'TV_BILL_PAYMENT'
+    | 'INTERNET_BILL_PAYMENT'
+
+export interface GetTransactionsQueryParams {
+    referenceId?: string
+    page?: number
+    size?: number
+    startDate?: string
+    endDate?: string
+    status?: TransactionStatus
+    serviceType?: ServiceType
+    billerType?: BillerType
+    billerCountryCode?: string
+}
+
 export interface BalanceInfo {
     oldBalance: number;
     newBalance: number;
