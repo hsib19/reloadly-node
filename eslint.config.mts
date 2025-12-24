@@ -13,6 +13,7 @@ export default defineConfig([
     "**/*.spec.*",
     "**/dist/**",
     "**/coverage/**",
+    "**/.vitepress/**",
   ]),
   {
     files: ["**/*.{js,ts}"],
