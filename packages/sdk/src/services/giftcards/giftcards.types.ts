@@ -139,9 +139,25 @@ export interface GetGiftCardTransactionsResponse {
 }
 
 // Orders
-export interface OrderGiftCardOptions {
-    productId: number;
-    recipientEmail: string;
+export interface RecipientPhoneDetails {
+    countryCode: string
+    phoneNumber: string
+}
+
+export interface ProductAdditionalRequirements {
+    [key: string]: string | number | boolean | null
+}
+
+export interface GiftCardOrderRequest {
+    customIdentifier?: string
+    preOrder?: boolean
+    productAdditionalRequirements?: ProductAdditionalRequirements
+    productId: number
+    quantity: number
+    recipientEmail?: string
+    recipientPhoneDetails?: RecipientPhoneDetails
+    senderName: string
+    unitPrice: number
 }
 
 export interface OrderGiftCardResponse {

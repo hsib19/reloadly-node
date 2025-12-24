@@ -5,7 +5,7 @@ import type {
     Product,
     FXRate,
     Discount,
-    OrderGiftCardOptions,
+    GiftCardOrderRequest,
     OrderGiftCardResponse,
     Countries,
     GetProductsResponse,
@@ -85,15 +85,15 @@ export class GiftCardService {
     }
 
     // Orders
-    async orderGiftCard(options: OrderGiftCardOptions): Promise<OrderGiftCardResponse> {
-        return this.http.request<OrderGiftCardResponse, unknown, OrderGiftCardOptions>({
+    async orderGiftCard(options: GiftCardOrderRequest): Promise<OrderGiftCardResponse> {
+        return this.http.request<OrderGiftCardResponse, unknown, GiftCardOrderRequest>({
             path: '/orders',
             method: 'POST',
             body: options,
         });
     }
 
-    async getRedeemCode(transactionId: string): Promise<OrderRedeemCodeResponse> {
+    async getRedeemCode(transactionId: number): Promise<OrderRedeemCodeResponse> {
         return this.http.request<OrderRedeemCodeResponse>({ path: `/orders/transactions/${transactionId}/cards` });
     }
 }
