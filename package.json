@@ -1,7 +1,7 @@
 {
   "name": "reloadly-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Unofficial Node.js SDK for Reloadly APIs, enabling integration with mobile top-ups, gift cards, and airtime services.",
   "main": "index.js",
   "private": false,
   "scripts": {
@@ -12,9 +12,19 @@
     "lint:fix": "eslint . --fix",
     "prepare": "husky"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "reloadly",
+    "nodejs",
+    "sdk",
+    "api",
+    "airtime",
+    "topup",
+    "giftcards",
+    "mobile",
+    "unofficial"
+  ],
+  "author": "Hasib Muharam",
+  "license": "MIT",
   "packageManager": "pnpm@10.25.0",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
