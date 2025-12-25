@@ -27,7 +27,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
-    "test:cov": "vitest --coverage"
+    "test:cov": "vitest --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "author": "Hasib Muharam",
   "license": "MIT",

@@ -8,6 +8,9 @@
     "build:sdk": "pnpm --filter reloadly-sdk build",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "test": "pnpm -r --if-present test",
+    "test:cov": "pnpm -r --if-present test:cov",
+    "typecheck": "pnpm -r --if-present typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky"
