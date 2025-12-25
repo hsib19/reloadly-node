@@ -1,56 +1,59 @@
 # Reloadly Node SDK
 
-[![npm version](https://img.shields.io/npm/v/reloadly-node)](https://www.npmjs.com/package/reloadly-node)
-[![npm downloads](https://img.shields.io/npm/dm/reloadly-node)](https://www.npmjs.com/package/reloadly-node)
-[![build](https://github.com/hsib19/reloadly-node/actions/workflows/publish.yml/badge.svg)](https://github.com/hsib19/reloadly-node/actions)
+![npm version](https://img.shields.io/npm/v/reloadly-node)
+![npm downloads](https://img.shields.io/npm/dm/reloadly-node)
+![license](https://img.shields.io/npm/l/reloadly-node)
+![CI](https://github.com/hsib19/reloadly-node/actions/workflows/ci.yml/badge.svg)
+![codecov](https://codecov.io/gh/hsib19/reloadly-node/branch/main/graph/badge.svg)
+![typescript](https://img.shields.io/badge/types-TypeScript-blue)
 
-A custom Node.js SDK for [Reloadly API](https://www.reloadly.com/), supporting **Airtime**, **GiftCards**, and **Utility Payments** with TypeScript type-safety and per-service token management.
+A Node.js SDK for the [Reloadly API](https://www.reloadly.com/), providing type-safe access to **Airtime**, **Gift Cards**, and **Utility Payments** with automatic OAuth token management.
 
 ---
 
 ## Features
 
 - **Per-Service Token Management**
-  Automatically handles OAuth tokens for each service. No more `INVALID_TOKEN` errors.
+  Each Reloadly service (Airtime, Gift Cards, Utilities) uses its own OAuth audience, preventing token conflicts and `INVALID_TOKEN` errors.
 
-- **Multi-Service Access via Single Instance**
-  Access all services from one instance:
-
-  ```ts
-  const reloadly = new Reloadly({ clientId, clientSecret, environment: 'sandbox' });
-
-  const airtimeBalance = await reloadly.airtime.getBalance();
-  const giftcardsProducts = await reloadly.giftcards.getProducts();
-  const billers = await reloadly.utilityPayments.getBillers();
-  ```
+- **Single Entry Point for All Services**
+  Access all Reloadly services from a single client instance.
 
 - **Automatic Token Refresh**
-  Tokens are automatically refreshed if expired.
+  OAuth tokens are refreshed automatically when expired.
 
-- **Environment-Aware Base URLs**
-  Sandbox / Production environment is automatically configured for all services.
+- **Environment-Aware Configuration**
+  Seamlessly switch between `sandbox` and `production` environments.
 
-- **Reusable HTTP Client with Auto Headers**
-  Every request automatically includes the correct Bearer token and Accept headers.
+- **Reusable HTTP Client**
+  All requests automatically include:
+  - `Authorization: Bearer <token>`
+  - Correct `Accept` headers per service
+  - JSON content handling
 
-- **Type-Safe Requests & Responses**
-  Full TypeScript support with typed request and response objects.
+- **Full TypeScript Support**
+  Strongly typed request and response models.
 
-- **Complete Coverage of Core Reloadly APIs**
-  All important endpoints available in their respective service:
-  - Airtime: Top-ups, Balance, Operators, FX Rates, Promotions, Transactions, MNP Lookup
-  - GiftCards: Balance, Categories, Products, Discounts, Orders, Transactions
-  - Utility Payments: Billers, Pay Bill, Balance, Transactions
+- **Broad API Coverage**
+  - **Airtime**: Balance, Top-ups, Operators, FX Rates, Promotions, Transactions, MNP Lookup
+  - **Gift Cards**: Balance, Categories, Products, Discounts, Orders, Transactions
+  - **Utility Payments**: Billers, Payments, Balance, Transactions
 
-- **Easy Extensibility**
-  Add new services or custom endpoints without changing the core SDK.
+- **Extensible Architecture**
+  New services or endpoints can be added without modifying the core client.
+
+---
+
+## Requirements
+
+- Node.js >= 18
 
 ---
 
 ## Installation
 
 ```bash
-npm add reloadly-node
+npm install reloadly-node
 ```
 
 or
@@ -58,6 +61,17 @@ or
 ```bash
 pnpm install reloadly-node
 ```
+
+---
+
+## Configuration
+
+You need Reloadly API credentials:
+
+- `RELOADLY_CLIENT_ID`
+- `RELOADLY_CLIENT_SECRET`
+
+These can be obtained from the Reloadly dashboard.
 
 ---
 
@@ -76,14 +90,42 @@ const reloadly = new Reloadly({
 const airtimeBalance = await reloadly.airtime.getBalance();
 console.log('Airtime Balance:', airtimeBalance);
 
-// GiftCards
-const giftcardsProducts = await reloadly.giftcards.getProducts();
-console.log('GiftCards Products:', giftcardsProducts);
+// Gift Cards
+const products = await reloadly.giftcards.getProducts();
+console.log('Gift Card Products:', products);
 
 // Utility Payments
 const billers = await reloadly.utilityPayments.getBillers();
 console.log('Utility Billers:', billers);
 ```
+
+---
+
+## Error Handling
+
+The SDK exposes typed error classes for consistent error handling.
+
+```ts
+import { ReloadlyAPIError, ReloadlyNetworkError } from 'reloadly-node';
+
+try {
+  await reloadly.airtime.getBalance();
+} catch (error) {
+  if (error instanceof ReloadlyAPIError) {
+    console.error('API Error:', error.status, error.data);
+  } else if (error instanceof ReloadlyNetworkError) {
+    console.error('Network Error:', error.originalError);
+  } else {
+    console.error('Unexpected Error:', error);
+  }
+}
+```
+
+---
+
+## Documentation
+
+- Reloadly API Reference: [https://www.reloadly.com/developers](https://www.reloadly.com/developers)
 
 ---
 

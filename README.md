@@ -1,5 +1,12 @@
 # Reloadly Node SDK
 
+![npm version](https://img.shields.io/npm/v/reloadly-node)
+![npm downloads](https://img.shields.io/npm/dm/reloadly-node)
+![license](https://img.shields.io/npm/l/reloadly-node)
+![CI](https://github.com/hsib19/reloadly-node/actions/workflows/ci.yml/badge.svg)
+![codecov](https://codecov.io/gh/hsib19/reloadly-node/branch/main/graph/badge.svg)
+![typescript](https://img.shields.io/badge/types-TypeScript-blue)
+
 A custom Node.js SDK for [Reloadly API](https://www.reloadly.com/), supporting **Airtime**, **GiftCards**, and **Utility Payments** with TypeScript type-safety and per-service token management.
 
 ---
