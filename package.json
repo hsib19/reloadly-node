@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": false,
   "scripts": {
-    "build:sdk": "pnpm --filter reloadly-sdk build",
+    "build": "pnpm build:sdk",
+    "build:sdk": "pnpm --filter reloadly-node build",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "test": "pnpm -r --if-present test",
