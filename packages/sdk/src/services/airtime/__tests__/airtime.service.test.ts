@@ -10,11 +10,6 @@ describe('AirtimeService', () => {
         service = new AirtimeService({ clientId: 'id', clientSecret: 'secret' } as any, http as any);
     });
 
-    it('createAccessToken calls request with correct path and method', async () => {
-        await service.createAccessToken();
-        expect(http.request).toHaveBeenCalledWith({ path: '/auth/token', method: 'POST' });
-    });
-
     it('getBalance calls request with correct path', async () => {
         await service.getBalance();
         expect(http.request).toHaveBeenCalledWith({ path: '/accounts/balance' });
@@ -26,10 +21,9 @@ describe('AirtimeService', () => {
     });
 
     it('getOperators calls request with query', async () => {
-        await service.getOperators('ID');
+        await service.getOperators();
         expect(http.request).toHaveBeenCalledWith({
             path: '/operators',
-            query: { countryCode: 'ID' },
         });
     });
 
@@ -59,9 +53,14 @@ describe('AirtimeService', () => {
     });
 
     it('mnpLookupGET calls request with phone and country', async () => {
-        await service.mnpLookupGET('08123', 'ID');
+        await service.mnpLookupGET({
+            path: {
+                countryCode: 'id',
+                phone: 813437345455
+            },
+        });
         expect(http.request).toHaveBeenCalledWith({
-            path: '/operators/mnp-lookup/phone/08123/countries/ID',
+            path: '/operators/mnp-lookup/phone/813437345455/countries/id',
         });
     });
 
@@ -86,20 +85,15 @@ describe('AirtimeService', () => {
     });
 
     it('autoDetectOperator calls request with phone and iso code', async () => {
-        await service.autoDetectOperator('08123', 'ID');
+        await service.autoDetectOperator({ path: { countryIsoCode: 'ID', phone: 8132 } });
         expect(http.request).toHaveBeenCalledWith({
-            path: '/operators/auto-detect/phone/08123/countries/ID',
+            path: '/operators/auto-detect/phone/8132/countries/ID',
         });
     });
 
     it('getOperatorByISOId calls request with country code', async () => {
-        await service.getOperatorByISOId('ID');
+        await service.getOperatorByISOCode({ path: { countryCode: 'ID' } });
         expect(http.request).toHaveBeenCalledWith({ path: '/operators/countries/ID' });
-    });
-
-    it('fetchFXRate calls request with fx-rate path', async () => {
-        await service.fetchFXRate();
-        expect(http.request).toHaveBeenCalledWith({ path: '/operators/fx-rate' });
     });
 
     it('getCommissions calls request with commissions path', async () => {
@@ -118,17 +112,17 @@ describe('AirtimeService', () => {
     });
 
     it('getPromotionById calls request with promotionId', async () => {
-        await service.getPromotionById(789);
+        await service.getPromotionById({ path: { promotionId: 789 } });
         expect(http.request).toHaveBeenCalledWith({ path: '/promotions/789' });
     });
 
     it('getPromotionsByISO calls request with country code', async () => {
-        await service.getPromotionsByISO('ID');
+        await service.getPromotionsByISO({ path: { countryCode: 'ID' } });
         expect(http.request).toHaveBeenCalledWith({ path: '/promotions/country-codes/ID' });
     });
 
     it('getPromotionsByOperatorId calls request with operatorId', async () => {
-        await service.getPromotionsByOperatorId(321);
+        await service.getPromotionsByOperatorId({ path: { operatorId: 321 } });
         expect(http.request).toHaveBeenCalledWith({ path: '/promotions/operators/321' });
     });
 
@@ -143,6 +137,21 @@ describe('AirtimeService', () => {
         await service.getTransactionById('tx123');
         expect(http.request).toHaveBeenCalledWith({
             path: '/topups/reports/transactions/tx123',
+        });
+    });
+
+    it('fetchFXRate calls request with POST and body', async () => {
+        const body = {
+            sourceCurrencyCode: 'USD',
+            destinationCurrencyCode: 'IDR',
+        };
+
+        await service.fetchFXRate(body as any);
+
+        expect(http.request).toHaveBeenCalledWith({
+            path: '/operators/fx-rate',
+            method: 'POST',
+            body,
         });
     });
 

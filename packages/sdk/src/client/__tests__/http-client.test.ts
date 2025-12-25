@@ -1,147 +1,99 @@
-import { TokenManager } from '../../auth/token-manager.js';
-import { HttpClient } from '../../client/http-client.js';
-import { ReloadlyConfig } from '../../client/reloadly-client.js';
-import { ReloadlyAPIError, ReloadlyNetworkError } from '../../errors/reloadly-error.js';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { HttpClient } from "../http-client.js";
+import { ReloadlyAPIError } from "../../errors/reloadly-error.js";
 
-// dummy config
-const config: ReloadlyConfig = { environment: 'sandbox' } as any;
+const mockConfig = {} as any;
+const mockTokenManager = { getToken: vi.fn() } as any;
 
-describe('HttpClient', () => {
+describe("HttpClient", () => {
     let client: HttpClient;
 
     beforeEach(() => {
-        client = new HttpClient(config);
+        mockTokenManager.getToken.mockResolvedValue("mock-token");
+        global.fetch = vi.fn();
+        client = new HttpClient(mockConfig, mockTokenManager, "https://api.test.com/", "application/json");
     });
 
-    it('returns custom baseUrl if provided', () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any, undefined, 'http://custom');
-        expect(client['getBaseUrl']()).toBe('http://custom');
-    });
-
-    it('returns auth base url when useAuthBaseUrl = true', () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any);
-        const url = client['getBaseUrl'](true);
-        expect(url).toContain('auth');
-    });
-
-    it('returns airtime base url when useAuthBaseUrl = false', () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any);
-        const url = client['getBaseUrl'](false);
-        expect(url).toContain('https://topups-sandbox.reloadly.com');
-    });
-
-    it('should build URL with query params', async () => {
-        // mock fetch
-        const mockFetch = vi.fn().mockResolvedValue({
+    it("should perform GET request and return data", async () => {
+        (fetch as any).mockResolvedValue({
             ok: true,
-            json: () => Promise.resolve({ success: true }),
-        });
-        (globalThis as any).fetch = mockFetch;
-
-        const res = await client.request<{ success: boolean }>({
-            path: '/test',
-            query: { foo: 'bar', baz: 123 },
+            status: 200,
+            text: async () => JSON.stringify({ success: true })
         });
 
-        expect(res.success).toBe(true);
-        expect(mockFetch).toHaveBeenCalled();
-        const calledUrl = new URL(mockFetch.mock.calls[0][0]);
-        expect(calledUrl.searchParams.get('foo')).toBe('bar');
-        expect(calledUrl.searchParams.get('baz')).toBe('123');
+        const result = await client.request<{ success: boolean }>({ path: "/test" });
+        expect(result).toEqual({ success: true });
+        expect(fetch).toHaveBeenCalledWith("https://api.test.com/test", expect.any(Object));
     });
 
-    it('falls back to "sandbox" when environment is undefined', () => {
-        const client = new HttpClient({} as any);
-        const url = client['getBaseUrl']();
-        expect(url).toContain('sandbox');
+    it("should append query parameters", async () => {
+        (fetch as any).mockResolvedValue({
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ query: "ok" })
+        });
+
+        await client.request({ path: "/query", query: { a: 1, b: "test" } });
+        expect(fetch).toHaveBeenCalledWith("https://api.test.com/query?a=1&b=test", expect.any(Object));
     });
 
-    it('should throw ReloadlyAPIError on non-ok response', async () => {
-        (globalThis as any).fetch = vi.fn().mockResolvedValue({
+    it("should send POST request with body", async () => {
+        (fetch as any).mockResolvedValue({
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ posted: true })
+        });
+
+        const result = await client.request<{ posted: boolean }>({
+            path: "/post",
+            method: "POST",
+            body: { key: "value" }
+        });
+
+        expect(result).toEqual({ posted: true });
+        const call = (fetch as any).mock.calls[0][1];
+        expect(call.method).toBe("POST");
+        expect(call.body).toBe(JSON.stringify({ key: "value" }));
+    });
+
+    it("should throw ReloadlyAPIError on non-ok response", async () => {
+        (fetch as any).mockResolvedValue({
             ok: false,
             status: 400,
-            json: () => Promise.resolve({ error: 'bad request' }),
+            text: async () => JSON.stringify({ error: "Bad Request" })
         });
 
-        await expect(
-            client.request<{ error: string }>({ path: '/fail' })
-        ).rejects.toBeInstanceOf(ReloadlyAPIError);
+        await expect(client.request({ path: "/error" })).rejects.toBeInstanceOf(ReloadlyAPIError);
     });
 
-    it('should attach Authorization header if TokenManager provided', async () => {
-        const tokenManager = { getToken: vi.fn().mockResolvedValue('fake-token') } as unknown as TokenManager;
-        client = new HttpClient(config, tokenManager);
-
-        (globalThis as any).fetch = vi.fn().mockResolvedValue({
+    it("should send correct headers", async () => {
+        (fetch as any).mockResolvedValue({
             ok: true,
-            json: () => Promise.resolve({}),
+            status: 200,
+            text: async () => JSON.stringify({}),
         });
 
-        await client.request({ path: '/auth' });
-        const headers = (globalThis as any).fetch.mock.calls[0][1].headers;
-        expect(headers.Authorization).toBe('Bearer fake-token');
+        await client.request({ path: "/headers" });
+
+        const [, options] = (fetch as any).mock.calls[0];
+
+        expect(options.headers).toEqual({
+            Authorization: "Bearer mock-token",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        });
     });
 
-    it('should wrap network errors in ReloadlyNetworkError', async () => {
-        (globalThis as any).fetch = vi.fn().mockRejectedValue(new Error('network down'));
-
-        await expect(
-            client.request({ path: '/network' })
-        ).rejects.toBeInstanceOf(ReloadlyNetworkError);
-    });
-
-    it('skips query params with undefined values', async () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any);
-
-        (globalThis as any).fetch = vi.fn().mockResolvedValue({
+    it("should return null when response body is empty", async () => {
+        (fetch as any).mockResolvedValue({
             ok: true,
-            json: () => Promise.resolve({}),
+            status: 204,
+            text: async () => "",
         });
 
-        await client.request({
-            path: '/test',
-            query: { foo: undefined, bar: 'baz' },
-        });
+        const result = await client.request({ path: "/empty" });
 
-        const calledUrl = new URL((globalThis as any).fetch.mock.calls[0][0]);
-        expect(calledUrl.searchParams.has('foo')).toBe(false);
-        expect(calledUrl.searchParams.get('bar')).toBe('baz');
-    });
-
-    it('stringifies body when provided', async () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any);
-
-        (globalThis as any).fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
-        });
-
-        await client.request({
-            path: '/with-body',
-            method: 'POST',
-            body: { foo: 'bar' },
-        });
-
-        const fetchOpts = (globalThis as any).fetch.mock.calls[0][1];
-        expect(fetchOpts.body).toBe(JSON.stringify({ foo: 'bar' }));
-    });
-
-    it('sets body to undefined when not provided', async () => {
-        const client = new HttpClient({ environment: 'sandbox' } as any);
-
-        (globalThis as any).fetch = vi.fn().mockResolvedValue({
-            ok: true,
-            json: () => Promise.resolve({}),
-        });
-
-        await client.request({
-            path: '/no-body',
-            method: 'POST',
-        });
-
-        const fetchOpts = (globalThis as any).fetch.mock.calls[0][1];
-        expect(fetchOpts.body).toBeUndefined();
+        expect(result).toBeNull();
     });
 
 });

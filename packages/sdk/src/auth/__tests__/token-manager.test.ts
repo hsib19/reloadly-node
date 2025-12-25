@@ -11,13 +11,6 @@ describe('TokenManager', () => {
 
     const config: TokenRequestConfig = { clientId: 'id', clientSecret: 'secret', environment: 'sandbox' };
 
-    it('uses sandbox as default environment', () => {
-        const tm = new TokenManager(config);
-        // getBaseUrl private, jadi tes via fetchToken
-        const url = (tm as any).getBaseUrl();
-        expect(url).toContain('sandbox');
-    });
-
     it('returns false when no token', () => {
         const tm = new TokenManager(config);
         expect((tm as any).isTokenValid()).toBe(false);

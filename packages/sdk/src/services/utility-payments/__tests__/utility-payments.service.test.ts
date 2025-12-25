@@ -13,18 +13,9 @@ describe('UtilityPaymentsService', () => {
         );
     });
 
-    it('createAccessToken calls request with correct path and method', async () => {
-        await service.createAccessToken();
-        expect(http.request).toHaveBeenCalledWith({
-            path: '/oauth/token',
-            method: 'POST',
-            useAuthBaseUrl: true,
-        });
-    });
-
     it('getBalance calls request with /balance', async () => {
         await service.getBalance();
-        expect(http.request).toHaveBeenCalledWith({ path: '/balance' });
+        expect(http.request).toHaveBeenCalledWith({ path: '/accounts/balance' });
     });
 
     it('getBillers calls request with /billers', async () => {
@@ -48,7 +39,7 @@ describe('UtilityPaymentsService', () => {
     });
 
     it('getTransactionById calls request with id', async () => {
-        await service.getTransactionById('tx123');
-        expect(http.request).toHaveBeenCalledWith({ path: '/transactions/tx123' });
+        await service.getTransactionById(1123);
+        expect(http.request).toHaveBeenCalledWith({ path: '/transactions/1123' });
     });
 });

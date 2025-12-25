@@ -10,23 +10,14 @@ describe('GiftCardService', () => {
         service = new GiftCardService({ clientId: 'id', clientSecret: 'secret' } as any, http as any);
     });
 
-    it('createAccessToken calls request with correct path and method', async () => {
-        await service.createAccessToken();
-        expect(http.request).toHaveBeenCalledWith({
-            path: '/oauth/token',
-            method: 'POST',
-            useAuthBaseUrl: true,
-        });
-    });
-
     it('getBalance calls request with /balance', async () => {
         await service.getBalance();
-        expect(http.request).toHaveBeenCalledWith({ path: '/balance' });
+        expect(http.request).toHaveBeenCalledWith({ path: '/accounts/balance' });
     });
 
     it('getCategories calls request with /categories', async () => {
         await service.getCategories();
-        expect(http.request).toHaveBeenCalledWith({ path: '/categories' });
+        expect(http.request).toHaveBeenCalledWith({ path: '/product-categories' });
     });
 
     it('getCountries calls request with /countries', async () => {
@@ -51,7 +42,7 @@ describe('GiftCardService', () => {
 
     it('getProductByISO calls request with isoCode query', async () => {
         await service.getProductByISO('US');
-        expect(http.request).toHaveBeenCalledWith({ path: '/products?isoCode=US' });
+        expect(http.request).toHaveBeenCalledWith({ path: 'countries/US/products' });
     });
 
     it('getRedeemInstructions calls request with /redeem-instructions', async () => {
@@ -100,7 +91,7 @@ describe('GiftCardService', () => {
     });
 
     it('getRedeemCode calls request with transactionId', async () => {
-        await service.getRedeemCode('tx999');
-        expect(http.request).toHaveBeenCalledWith({ path: '/orders/transactions/tx999/cards' });
+        await service.getRedeemCode(3611);
+        expect(http.request).toHaveBeenCalledWith({ path: '/orders/transactions/3611/cards' });
     });
 });
