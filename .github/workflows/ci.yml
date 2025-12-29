@@ -45,10 +45,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+
+      - name: Run tests
       - run: pnpm test:cov
+
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: hsib19/reloadly-node
           files: packages/sdk/coverage/lcov.info
           fail_ci_if_error: true
 
