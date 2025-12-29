@@ -45,7 +45,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+      - run: pnpm test:cov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: packages/sdk/coverage/lcov.info
+          fail_ci_if_error: true
 
   build:
     runs-on: ubuntu-latest

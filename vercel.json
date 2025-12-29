@@ -1,4 +1,5 @@
 {
   "buildCommand": "pnpm build:docs",
-  "outputDirectory": "apps/docs/.vitepress/dist"
+  "outputDirectory": "apps/docs/.vitepress/dist",
+  "ignoreBuildStep": "git diff --quiet HEAD^ HEAD -- apps/docs"
 }
